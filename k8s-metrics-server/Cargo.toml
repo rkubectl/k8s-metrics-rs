@@ -1,0 +1,23 @@
+[package]
+name = "k8s-metrics-server"
+description = "K8s metrics server"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+repository.workspace = true
+license.workspace = true
+
+
+[dependencies]
+k8s-metrics.workspace = true
+k8s-openapi = { workspace = true, features = ["latest"] }
+kube.workspace = true
+tokio.workspace = true
+axum = "0.8"
+serde_json = "1.0"
+serde = { version = "1.0", features = ["derive"] }
+tower = "0.5"
+
+
+[lints]
+workspace = true

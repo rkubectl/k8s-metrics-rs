@@ -1,6 +1,6 @@
 [workspace]
 resolver = "3"
-members = ["k8s-metrics"]
+members = ["k8s-metrics", "k8s-metrics-server"]
 
 
 [workspace.package]
@@ -20,6 +20,9 @@ serde = { version = "1.0", features = ["derive"] }
 thiserror = "2.0"
 tokio = { version = "1.46", features = ["full"] }
 
+# Local dependencies
+k8s-metrics = { path = "./k8s-metrics" }
+ 
 
 [workspace.lints.clippy]
 explicit_iter_loop = "warn"

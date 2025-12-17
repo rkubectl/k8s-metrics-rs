@@ -7,7 +7,7 @@ members = ["k8s-metrics"]
 version = "0.26.1"
 edition = "2021"
 rust-version = "1.85"
-repository = "https://github.com/imp/k8s-metrics-rs"
+repository = "https://github.com/rkubectl/k8s-metrics-rs"
 license = "Apache-2.0"
 
 

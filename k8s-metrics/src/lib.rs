@@ -33,9 +33,6 @@ pub mod external_metrics;
 pub mod metrics;
 pub mod quantity;
 
-pub const METRICS_API_GROUP: &str = "metrics.k8s.io";
-pub const METRICS_API_VERSION: &str = "v1beta1";
-
 fn default<T: Default>() -> T {
     T::default()
 }

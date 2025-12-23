@@ -1,5 +1,3 @@
-use constcat::concat;
-
 use super::*;
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
@@ -28,7 +26,7 @@ impl PodMetrics {
 }
 
 impl k8s::Resource for PodMetrics {
-    const API_VERSION: &'static str = concat!(METRICS_API_GROUP, "/", METRICS_API_VERSION);
+    const API_VERSION: &'static str = METRICS_API_GROUP_VERSION;
     const GROUP: &'static str = METRICS_API_GROUP;
     const KIND: &'static str = "PodMetrics";
     const VERSION: &'static str = METRICS_API_VERSION;

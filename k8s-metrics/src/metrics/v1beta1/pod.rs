@@ -30,7 +30,7 @@ impl PodMetrics {
 impl k8s::Resource for PodMetrics {
     const API_VERSION: &'static str = concat!(METRICS_API_GROUP, "/", METRICS_API_VERSION);
     const GROUP: &'static str = METRICS_API_GROUP;
-    const KIND: &'static str = "pod";
+    const KIND: &'static str = "PodMetrics";
     const VERSION: &'static str = METRICS_API_VERSION;
     const URL_PATH_SEGMENT: &'static str = "pods";
     type Scope = k8s::NamespaceResourceScope;

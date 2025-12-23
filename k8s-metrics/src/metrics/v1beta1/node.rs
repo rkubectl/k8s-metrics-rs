@@ -24,7 +24,7 @@ impl NodeMetrics {
 impl k8s::Resource for NodeMetrics {
     const API_VERSION: &'static str = concat!(METRICS_API_GROUP, "/", METRICS_API_VERSION);
     const GROUP: &'static str = METRICS_API_GROUP;
-    const KIND: &'static str = "node";
+    const KIND: &'static str = "NodeMetrics";
     const VERSION: &'static str = METRICS_API_VERSION;
     const URL_PATH_SEGMENT: &'static str = "nodes";
     type Scope = k8s::ClusterResourceScope;

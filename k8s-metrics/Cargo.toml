@@ -9,6 +9,7 @@ license.workspace = true
 
 
 [dependencies]
+constcat.workspace = true
 go-parse-duration.workspace = true
 k8s-openapi.workspace = true
 serde.workspace = true

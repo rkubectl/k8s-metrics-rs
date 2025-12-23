@@ -1,3 +1,5 @@
+use constcat::concat;
+
 use super::*;
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
@@ -26,10 +28,10 @@ impl PodMetrics {
 }
 
 impl k8s::Resource for PodMetrics {
-    const API_VERSION: &'static str = "metrics.k8s.io/v1beta1";
-    const GROUP: &'static str = "metrics.k8s.io";
+    const API_VERSION: &'static str = concat!(METRICS_API_GROUP, "/", METRICS_API_VERSION);
+    const GROUP: &'static str = METRICS_API_GROUP;
     const KIND: &'static str = "pod";
-    const VERSION: &'static str = "v1beta1";
+    const VERSION: &'static str = METRICS_API_VERSION;
     const URL_PATH_SEGMENT: &'static str = "pods";
     type Scope = k8s::NamespaceResourceScope;
 }

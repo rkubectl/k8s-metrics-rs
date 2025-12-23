@@ -1,6 +1,12 @@
 [workspace]
 resolver = "3"
-members = ["k8s-metrics", "k8s-metrics-server"]
+members = [
+    "k8s-metrics",
+    "k8s-metrics-collector",
+    "k8s-metrics-ext",
+    "k8s-metrics-kubeapi",
+    "k8s-metrics-server",
+]
 
 
 [workspace.package]
@@ -12,17 +18,26 @@ license = "Apache-2.0"
 
 
 [workspace.dependencies]
+axum = "0.8"
 constcat = "0.6"
 go-parse-duration = "0.1"
 k8s-openapi = { version = "0.27", features = [] }
 kube = { version = "3.0" }
+prometheus-parse = "0.2"
 serde = { version = "1.0", features = ["derive"] }
 thiserror = "2.0"
+time = "0.3"
 tokio = { version = "1.46", features = ["full"] }
+tower = "0.5"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["fmt", "env-filter"] }
 
 # Local dependencies
 k8s-metrics = { path = "./k8s-metrics" }
- 
+k8s-metrics-collector = { path = "./k8s-metrics-collector" }
+k8s-metrics-ext = { path = "./k8s-metrics-ext" }
+k8s-metrics-kubeapi = { path = "./k8s-metrics-kubeapi" }
+
 
 [workspace.lints.clippy]
 explicit_iter_loop = "warn"

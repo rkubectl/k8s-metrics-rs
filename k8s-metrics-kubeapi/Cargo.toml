@@ -1,0 +1,20 @@
+[package]
+name = "k8s-metrics-kubeapi"
+
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+repository.workspace = true
+license.workspace = true
+
+
+[dependencies]
+k8s-metrics-ext.workspace = true
+k8s-openapi.workspace = true
+kube.workspace = true
+prometheus-parse.workspace = true
+tracing.workspace = true
+
+
+[lints]
+workspace = true

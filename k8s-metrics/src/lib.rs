@@ -33,6 +33,31 @@ pub mod external_metrics;
 pub mod metrics;
 pub mod quantity;
 
+/// Obtain the default value for a type.
+
+///
+
+/// Returns the default value for `T`.
+
+///
+
+/// # Examples
+
+///
+
+/// ```
+
+/// let x: i32 = default::<i32>();
+
+/// assert_eq!(x, 0);
+
+///
+
+/// let s: String = default();
+
+/// assert_eq!(s, String::new());
+
+/// ```
 fn default<T: Default>() -> T {
     T::default()
 }

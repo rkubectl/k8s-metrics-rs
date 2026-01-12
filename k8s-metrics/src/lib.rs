@@ -23,7 +23,7 @@ use serde::{Deserialize, Serialize};
 use k8s::api::core::v1 as corev1;
 use k8s::apimachinery::pkg::api::resource;
 use k8s::apimachinery::pkg::apis::meta::v1 as metav1;
-use k8s::chrono::{DateTime, Utc};
+use k8s::jiff::Timestamp;
 
 pub use metrics::v1beta1;
 pub use quantity::{QuantityExt, QuantityParseError};

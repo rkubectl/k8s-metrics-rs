@@ -50,7 +50,7 @@ impl Default for NodeMetrics {
     fn default() -> Self {
         Self {
             metadata: default(),
-            timestamp: metav1::Time(DateTime::<Utc>::default()),
+            timestamp: metav1::Time(Timestamp::default()),
             window: default(),
             usage: default(),
         }

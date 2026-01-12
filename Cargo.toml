@@ -6,7 +6,7 @@ members = ["k8s-metrics"]
 [workspace.package]
 version = "0.26.1"
 edition = "2021"
-rust-version = "1.85"
+rust-version = "1.88"
 repository = "https://github.com/rkubectl/k8s-metrics-rs"
 license = "Apache-2.0"
 
@@ -14,8 +14,8 @@ license = "Apache-2.0"
 [workspace.dependencies]
 constcat = "0.6"
 go-parse-duration = "0.1"
-k8s-openapi = { version = "0.26", features = [] }
-kube = { version = "2.0" }
+k8s-openapi = { version = "0.27", features = [] }
+kube = { version = "3.0" }
 serde = { version = "1.0", features = ["derive"] }
 thiserror = "2.0"
 tokio = { version = "1.46", features = ["full"] }

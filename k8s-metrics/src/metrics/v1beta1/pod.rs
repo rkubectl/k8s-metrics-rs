@@ -57,7 +57,7 @@ impl Default for PodMetrics {
         Self {
             metadata: default(),
             containers: default(),
-            timestamp: metav1::Time(DateTime::<Utc>::default()),
+            timestamp: metav1::Time(Timestamp::default()),
             window: default(),
         }
     }

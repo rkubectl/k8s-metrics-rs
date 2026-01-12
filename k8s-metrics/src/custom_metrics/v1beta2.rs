@@ -107,7 +107,7 @@ where
 
         let metric = MetricIdentifier::new(name);
 
-        let timestamp = metav1::Time(DateTime::<Utc>::default());
+        let timestamp = metav1::Time(Timestamp::default());
 
         Self {
             metadata,
@@ -132,7 +132,7 @@ where
         };
         let described_object = object_ref.clone();
         let metric = MetricIdentifier::new(name);
-        let timestamp = metav1::Time(DateTime::<Utc>::default());
+        let timestamp = metav1::Time(Timestamp::default());
 
         Self {
             metadata,
@@ -150,6 +150,13 @@ where
     pub fn with_object(name: impl ToString, object: &M) -> Self {
         let object_ref = object_ref(object);
         Self::with_object_ref(name, &object_ref)
+    }
+
+    /// Set timestamp for this `MetricValue`
+    ///
+    pub fn timestamp(self, timestamp: Timestamp) -> Self {
+        let timestamp = metav1::Time(timestamp);
+        Self { timestamp, ..self }
     }
 }
 

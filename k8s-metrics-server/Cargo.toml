@@ -1,0 +1,30 @@
+[package]
+name = "k8s-metrics-server"
+description = "K8s metrics server"
+edition = "2024"
+
+version.workspace = true
+# edition.workspace = true
+rust-version.workspace = true
+repository.workspace = true
+license.workspace = true
+
+
+[dependencies]
+axum.workspace = true
+constcat.workspace = true
+k8s-metrics.workspace = true
+k8s-metrics-collector.workspace = true
+k8s-metrics-ext.workspace = true
+k8s-metrics-kubeapi.workspace = true
+k8s-openapi = { workspace = true, features = ["latest"] }
+kube.workspace = true
+tokio.workspace = true
+tower.workspace = true
+time.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true
+
+
+[lints]
+workspace = true

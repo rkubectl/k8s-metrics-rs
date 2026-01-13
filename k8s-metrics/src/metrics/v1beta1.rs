@@ -1,7 +1,13 @@
+use constcat::concat;
+
 use super::*;
 
 pub use node::NodeMetrics;
 pub use pod::PodMetrics;
+
+pub const METRICS_API_GROUP: &str = "metrics.k8s.io";
+pub const METRICS_API_VERSION: &str = "v1beta1";
+pub const METRICS_API_GROUP_VERSION: &str = concat!(METRICS_API_GROUP, "/", METRICS_API_VERSION);
 
 mod duration;
 mod node;

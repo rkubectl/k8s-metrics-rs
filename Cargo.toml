@@ -5,7 +5,7 @@ members = ["k8s-metrics"]
 
 [workspace.package]
 version = "0.28.0"
-edition = "2021"
+edition = "2024"
 rust-version = "1.88"
 repository = "https://github.com/rkubectl/k8s-metrics-rs"
 license = "Apache-2.0"

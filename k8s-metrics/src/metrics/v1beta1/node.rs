@@ -60,6 +60,7 @@ impl Default for NodeMetrics {
 #[cfg(test)]
 mod tests {
     use super::*;
+
     use k8s::Resource as _;
     use k8s::serde_json as json;
 

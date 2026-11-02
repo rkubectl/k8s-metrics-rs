@@ -73,7 +73,8 @@ pub type ExternalMetricValueList<M> = k8s::List<ExternalMetricValue<M>>;
 #[cfg(test)]
 mod tests {
     use super::*;
-    use k8s::serde_json::{self as json, json};
+
+    use k8s::serde_json as json;
 
     struct Queue;
 
@@ -94,7 +95,7 @@ mod tests {
     #[test]
     fn upstream_metric_value_round_trip() {
         let item: json::Value = json::from_str(METRIC).unwrap();
-        let response = json!({
+        let response = json::json!({
             "apiVersion":"external.metrics.k8s.io/v1beta1",
             "kind":"ExternalMetricValueList",
             "metadata":{},
@@ -115,11 +116,11 @@ mod tests {
         assert_eq!(metric.window_seconds, None);
         assert!(json::to_value(metric).unwrap().get("window").is_none());
 
-        item["window"] = json!(null);
+        item["window"] = json::json!(null);
         let metric: ExternalMetricValue<Queue> = json::from_value(item.clone()).unwrap();
         assert_eq!(metric.window_seconds, None);
 
-        item["window"] = json!(0);
+        item["window"] = json::json!(0);
         let metric: ExternalMetricValue<Queue> = json::from_value(item.clone()).unwrap();
         assert_eq!(metric.window_seconds, Some(0));
         assert_eq!(json::to_value(metric).unwrap(), item);

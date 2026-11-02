@@ -187,6 +187,7 @@ where
 #[cfg(test)]
 mod tests {
     use k8s::Resource as _;
+    use k8s::serde_json as json;
 
     use super::*;
 
@@ -487,10 +488,8 @@ mod tests {
 
     #[test]
     fn upstream_metric_value_round_trip() {
-        use k8s::serde_json::{self as json, json};
-
         let item: json::Value = json::from_str(METRIC).unwrap();
-        let response = json!({
+        let response = json::json!({
             "apiVersion":"custom.metrics.k8s.io/v1beta2",
             "kind":"MetricValueList",
             "metadata":{},
@@ -506,8 +505,6 @@ mod tests {
 
     #[test]
     fn optional_window_preserves_absent_and_zero() {
-        use k8s::serde_json::{self as json, json};
-
         let mut item: json::Value = json::from_str(METRIC).unwrap();
         item.as_object_mut().unwrap().remove("windowSeconds");
         let metric: MetricValue<()> = json::from_value(item.clone()).unwrap();
@@ -519,11 +516,11 @@ mod tests {
                 .is_none()
         );
 
-        item["windowSeconds"] = json!(null);
+        item["windowSeconds"] = json::json!(null);
         let metric: MetricValue<()> = json::from_value(item.clone()).unwrap();
         assert_eq!(metric.window_seconds, None);
 
-        item["windowSeconds"] = json!(0);
+        item["windowSeconds"] = json::json!(0);
         let metric: MetricValue<()> = json::from_value(item.clone()).unwrap();
         assert_eq!(metric.window_seconds, Some(0));
         assert_eq!(json::to_value(metric).unwrap(), item);

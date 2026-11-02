@@ -3,7 +3,9 @@ use k8s_openapi::Resource as _;
 
 k8s_openapi::k8s_if_ge_1_37! {
     use k8s_metrics::v1;
-    use k8s_openapi::{List, ListableResource as _, serde_json::json};
+    use k8s_openapi::List;
+    use k8s_openapi::ListableResource as _;
+    use k8s_openapi::serde_json as json;
 
     #[test]
     fn stable_node_metrics() {
@@ -16,7 +18,7 @@ k8s_openapi::k8s_if_ge_1_37! {
             <v1::NodeMetrics as kube::Resource>::url_path(&(), None),
             "/apis/metrics.k8s.io/v1/nodes"
         );
-        let list: List<v1::NodeMetrics> = k8s_openapi::serde_json::from_value(json!({
+        let list: List<v1::NodeMetrics> = json::from_value(json::json!({
             "apiVersion": "metrics.k8s.io/v1",
             "kind": "NodeMetricsList",
             "metadata": {},
@@ -42,7 +44,7 @@ k8s_openapi::k8s_if_ge_1_37! {
             <v1::PodMetrics as kube::Resource>::url_path(&(), Some("default")),
             "/apis/metrics.k8s.io/v1/namespaces/default/pods"
         );
-        let list: List<v1::PodMetrics> = k8s_openapi::serde_json::from_value(json!({
+        let list: List<v1::PodMetrics> = json::from_value(json::json!({
             "apiVersion": "metrics.k8s.io/v1",
             "kind": "PodMetricsList",
             "metadata": {},

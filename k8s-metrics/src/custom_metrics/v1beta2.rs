@@ -30,8 +30,10 @@ impl MetricIdentifier {
 /// `MetricValue` is the metric value for some object
 ///
 #[derive(Debug, Serialize, Deserialize)]
-#[serde(rename = "camelCase")]
+#[serde(rename_all = "camelCase", bound = "")]
 pub struct MetricValue<M> {
+    /// Local metadata for kube integration; metric values have no wire metadata.
+    #[serde(skip)]
     pub metadata: metav1::ObjectMeta,
 
     /// a reference to the described object
@@ -49,7 +51,8 @@ pub struct MetricValue<M> {
     /// metrics calculated from cumulative metrics (or zero for
     /// non-calculated instantaneous metrics).
     ///
-    pub window_seconds: i64, // `json:"windowSeconds,omitempty" protobuf:"bytes,4,opt,name=windowSeconds"`
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub window_seconds: Option<i64>,
 
     /// the value of the metric for this
     ///
@@ -62,7 +65,7 @@ pub struct MetricValue<M> {
 impl<M: k8s::Resource> k8s::Resource for MetricValue<M> {
     const API_VERSION: &'static str = "custom.metrics.k8s.io/v1beta2";
     const GROUP: &'static str = "custom.metrics.k8s.io";
-    const KIND: &'static str = M::KIND;
+    const KIND: &'static str = "MetricValue";
     const VERSION: &'static str = "v1beta2";
     const URL_PATH_SEGMENT: &'static str = M::URL_PATH_SEGMENT;
     type Scope = M::Scope;
@@ -233,7 +236,7 @@ mod tests {
         assert_eq!(metric_value.metric.name, "cpu_usage");
         assert!(metric_value.metric.selector.is_none());
 
-        assert_eq!(metric_value.window_seconds, 0);
+        assert_eq!(metric_value.window_seconds, None);
         assert_eq!(metric_value.value, resource::Quantity::default());
     }
 
@@ -320,7 +323,7 @@ mod tests {
         assert_eq!(metric_value.metric.name, "network_bytes");
         assert!(metric_value.metric.selector.is_none());
 
-        assert_eq!(metric_value.window_seconds, 0);
+        assert_eq!(metric_value.window_seconds, None);
         assert_eq!(metric_value.value, resource::Quantity::default());
     }
 
@@ -418,7 +421,7 @@ mod tests {
         assert_eq!(metric_value.metric.name, "pod_restarts");
         assert!(metric_value.metric.selector.is_none());
 
-        assert_eq!(metric_value.window_seconds, 0);
+        assert_eq!(metric_value.window_seconds, None);
         assert_eq!(metric_value.value, resource::Quantity::default());
     }
 
@@ -471,5 +474,58 @@ mod tests {
 
         assert_eq!(metric_value.metadata.name.unwrap(), "requests_per_minute");
         assert_eq!(metric_value.timestamp, metav1::Time(timestamp));
+    }
+
+    // Kubernetes 1.37 custom_metrics/v1beta2 MetricValue wire shape.
+    const METRIC: &str = r#"{
+        "describedObject": {"apiVersion":"v1","kind":"Pod","name":"app","namespace":"default"},
+        "metric": {"name":"requests","selector":{"matchLabels":{"route":"/"}}},
+        "timestamp":"2026-11-02T10:00:00Z",
+        "windowSeconds":30,
+        "value":"10"
+    }"#;
+
+    #[test]
+    fn upstream_metric_value_round_trip() {
+        use k8s::serde_json::{self as json, json};
+
+        let item: json::Value = json::from_str(METRIC).unwrap();
+        let response = json!({
+            "apiVersion":"custom.metrics.k8s.io/v1beta2",
+            "kind":"MetricValueList",
+            "metadata":{},
+            "items":[item.clone()]
+        });
+        let list: MetricValueList<corev1::Pod> = json::from_value(response).unwrap();
+        let metric = &list.items[0];
+        assert_eq!(metric.described_object.name.as_deref(), Some("app"));
+        assert_eq!(metric.window_seconds, Some(30));
+        assert_eq!(json::to_value(metric).unwrap(), item);
+        assert_eq!(MetricValue::<corev1::Pod>::KIND, "MetricValue");
+    }
+
+    #[test]
+    fn optional_window_preserves_absent_and_zero() {
+        use k8s::serde_json::{self as json, json};
+
+        let mut item: json::Value = json::from_str(METRIC).unwrap();
+        item.as_object_mut().unwrap().remove("windowSeconds");
+        let metric: MetricValue<()> = json::from_value(item.clone()).unwrap();
+        assert_eq!(metric.window_seconds, None);
+        assert!(
+            json::to_value(metric)
+                .unwrap()
+                .get("windowSeconds")
+                .is_none()
+        );
+
+        item["windowSeconds"] = json!(null);
+        let metric: MetricValue<()> = json::from_value(item.clone()).unwrap();
+        assert_eq!(metric.window_seconds, None);
+
+        item["windowSeconds"] = json!(0);
+        let metric: MetricValue<()> = json::from_value(item.clone()).unwrap();
+        assert_eq!(metric.window_seconds, Some(0));
+        assert_eq!(json::to_value(metric).unwrap(), item);
     }
 }

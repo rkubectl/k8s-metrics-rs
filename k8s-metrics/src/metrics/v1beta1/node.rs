@@ -60,6 +60,7 @@ impl Default for NodeMetrics {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use k8s::Resource as _;
     use k8s::serde_json as json;
 
     const NODE: &str = r#"{
@@ -88,7 +89,8 @@ mod tests {
 
     #[test]
     fn resource() {
-        let node: NodeMetrics = json::from_str(NODE).unwrap();
+        let payload = NODE.replace("metrics.k8s.io/v1beta1", NodeMetrics::API_VERSION);
+        let node: NodeMetrics = json::from_str(&payload).unwrap();
         assert_eq!(node.metadata.name.as_deref(), Some("docker-desktop"));
         assert_eq!(node.window, time::Duration::from_secs_f64(23.5));
         assert_eq!(node.usage.cpu().unwrap(), 0.196382978);

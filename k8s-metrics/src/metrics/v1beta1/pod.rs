@@ -66,6 +66,7 @@ impl Default for PodMetrics {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use k8s::Resource as _;
     use k8s::serde_json as json;
 
     const POD: &str = r#"{
@@ -95,7 +96,8 @@ mod tests {
 
     #[test]
     fn resource() {
-        let pod: PodMetrics = json::from_str(POD).unwrap();
+        let payload = POD.replace("metrics.k8s.io/v1beta1", PodMetrics::API_VERSION);
+        let pod: PodMetrics = json::from_str(&payload).unwrap();
         assert_eq!(
             pod.metadata.name.as_deref(),
             Some("metrics-server-6db985556d-nqbdz")

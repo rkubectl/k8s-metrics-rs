@@ -1,5 +1,3 @@
-use std::time;
-
 use super::*;
 
 use k8s::serde_json as json;
